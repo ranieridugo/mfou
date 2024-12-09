@@ -1,0 +1,1571 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+    body {
+           font-size: 18px; /* Adjust the base font size */
+           font-family: Arial, sans-serif; /* Optional: Change font family */
+       }
+        .search-box { margin: 20px; }
+        select { width: 250px; padding: 10px; font-size: 16px; }
+        option { font-size: 16px; }
+        .dropdown { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+<h1>Goodness of covariance fit (asymptotic regime)</h1>
+<p> The following plots display the empirical auto and cross-covariances (represented by bars) of realized volatilities from the Oxford-Man dataset, alongside the mfOU-implied small-alpha theoretical ones (depicted by red curves). The (asymptotic) theoretical auto and cross-covariances are calculated using parameters obtained through minimum distance estimation (MDE), which targets the distance between empirical and theoretical quantities shown in the plots. For more details, please refer to Section 5.2, where this regime is referred to as slow mean reversion. </p>
+
+<!-- Index Dropdown -->
+<div class="dropdown">
+    <label for="indexDropdown">Autocovariance:</label>
+    <select id="indexDropdown" onchange="scrollToPlot('index')">
+        <option value="">Select an index</option>
+<option value="AEX">AEX</option><option value="AORD">AORD</option><option value="BFX">BFX</option><option value="BSESN">BSESN</option><option value="BVSP">BVSP</option><option value="DJI">DJI</option><option value="FCHI">FCHI</option><option value="FTSE">FTSE</option><option value="GDAXI">GDAXI</option><option value="HSI">HSI</option><option value="IBEX">IBEX</option><option value="IXIC">IXIC</option><option value="KS11">KS11</option><option value="KSE">KSE</option><option value="MXX">MXX</option><option value="N225">N225</option><option value="NSEI">NSEI</option><option value="RUT">RUT</option><option value="SPX">SPX</option><option value="SSEC">SSEC</option><option value="SSMI">SSMI</option><option value="S5E">S5E</option></select></div>
+<div class="dropdown">
+    <label for="pairDropdown">Cross-covariance:</label>
+    <select id="pairDropdown" onchange="scrollToPlot('pair')">
+        <option value="">Select a pair</option>
+<option value="AEX_AORD">AEX/AORD</option><option value="AEX_BFX">AEX/BFX</option><option value="AEX_BSESN">AEX/BSESN</option><option value="AEX_BVSP">AEX/BVSP</option><option value="AEX_DJI">AEX/DJI</option><option value="AEX_FCHI">AEX/FCHI</option><option value="AEX_FTSE">AEX/FTSE</option><option value="AEX_GDAXI">AEX/GDAXI</option><option value="AEX_HSI">AEX/HSI</option><option value="AEX_IBEX">AEX/IBEX</option><option value="AEX_IXIC">AEX/IXIC</option><option value="AEX_KS11">AEX/KS11</option><option value="AEX_KSE">AEX/KSE</option><option value="AEX_MXX">AEX/MXX</option><option value="AEX_N225">AEX/N225</option><option value="AEX_NSEI">AEX/NSEI</option><option value="AEX_RUT">AEX/RUT</option><option value="AEX_SPX">AEX/SPX</option><option value="AEX_SSEC">AEX/SSEC</option><option value="AEX_SSMI">AEX/SSMI</option><option value="AEX_S5E">AEX/S5E</option><option value="AORD_BFX">AORD/BFX</option><option value="AORD_BSESN">AORD/BSESN</option><option value="AORD_BVSP">AORD/BVSP</option><option value="AORD_DJI">AORD/DJI</option><option value="AORD_FCHI">AORD/FCHI</option><option value="AORD_FTSE">AORD/FTSE</option><option value="AORD_GDAXI">AORD/GDAXI</option><option value="AORD_HSI">AORD/HSI</option><option value="AORD_IBEX">AORD/IBEX</option><option value="AORD_IXIC">AORD/IXIC</option><option value="AORD_KS11">AORD/KS11</option><option value="AORD_KSE">AORD/KSE</option><option value="AORD_MXX">AORD/MXX</option><option value="AORD_N225">AORD/N225</option><option value="AORD_NSEI">AORD/NSEI</option><option value="AORD_RUT">AORD/RUT</option><option value="AORD_SPX">AORD/SPX</option><option value="AORD_SSEC">AORD/SSEC</option><option value="AORD_SSMI">AORD/SSMI</option><option value="AORD_S5E">AORD/S5E</option><option value="BFX_BSESN">BFX/BSESN</option><option value="BFX_BVSP">BFX/BVSP</option><option value="BFX_DJI">BFX/DJI</option><option value="BFX_FCHI">BFX/FCHI</option><option value="BFX_FTSE">BFX/FTSE</option><option value="BFX_GDAXI">BFX/GDAXI</option><option value="BFX_HSI">BFX/HSI</option><option value="BFX_IBEX">BFX/IBEX</option><option value="BFX_IXIC">BFX/IXIC</option><option value="BFX_KS11">BFX/KS11</option><option value="BFX_KSE">BFX/KSE</option><option value="BFX_MXX">BFX/MXX</option><option value="BFX_N225">BFX/N225</option><option value="BFX_NSEI">BFX/NSEI</option><option value="BFX_RUT">BFX/RUT</option><option value="BFX_SPX">BFX/SPX</option><option value="BFX_SSEC">BFX/SSEC</option><option value="BFX_SSMI">BFX/SSMI</option><option value="BFX_S5E">BFX/S5E</option><option value="BSESN_BVSP">BSESN/BVSP</option><option value="BSESN_DJI">BSESN/DJI</option><option value="BSESN_FCHI">BSESN/FCHI</option><option value="BSESN_FTSE">BSESN/FTSE</option><option value="BSESN_GDAXI">BSESN/GDAXI</option><option value="BSESN_HSI">BSESN/HSI</option><option value="BSESN_IBEX">BSESN/IBEX</option><option value="BSESN_IXIC">BSESN/IXIC</option><option value="BSESN_KS11">BSESN/KS11</option><option value="BSESN_KSE">BSESN/KSE</option><option value="BSESN_MXX">BSESN/MXX</option><option value="BSESN_N225">BSESN/N225</option><option value="BSESN_NSEI">BSESN/NSEI</option><option value="BSESN_RUT">BSESN/RUT</option><option value="BSESN_SPX">BSESN/SPX</option><option value="BSESN_SSEC">BSESN/SSEC</option><option value="BSESN_SSMI">BSESN/SSMI</option><option value="BSESN_S5E">BSESN/S5E</option><option value="BVSP_DJI">BVSP/DJI</option><option value="BVSP_FCHI">BVSP/FCHI</option><option value="BVSP_FTSE">BVSP/FTSE</option><option value="BVSP_GDAXI">BVSP/GDAXI</option><option value="BVSP_HSI">BVSP/HSI</option><option value="BVSP_IBEX">BVSP/IBEX</option><option value="BVSP_IXIC">BVSP/IXIC</option><option value="BVSP_KS11">BVSP/KS11</option><option value="BVSP_KSE">BVSP/KSE</option><option value="BVSP_MXX">BVSP/MXX</option><option value="BVSP_N225">BVSP/N225</option><option value="BVSP_NSEI">BVSP/NSEI</option><option value="BVSP_RUT">BVSP/RUT</option><option value="BVSP_SPX">BVSP/SPX</option><option value="BVSP_SSEC">BVSP/SSEC</option><option value="BVSP_SSMI">BVSP/SSMI</option><option value="BVSP_S5E">BVSP/S5E</option><option value="DJI_FCHI">DJI/FCHI</option><option value="DJI_FTSE">DJI/FTSE</option><option value="DJI_GDAXI">DJI/GDAXI</option><option value="DJI_HSI">DJI/HSI</option><option value="DJI_IBEX">DJI/IBEX</option><option value="DJI_IXIC">DJI/IXIC</option><option value="DJI_KS11">DJI/KS11</option><option value="DJI_KSE">DJI/KSE</option><option value="DJI_MXX">DJI/MXX</option><option value="DJI_N225">DJI/N225</option><option value="DJI_NSEI">DJI/NSEI</option><option value="DJI_RUT">DJI/RUT</option><option value="DJI_SPX">DJI/SPX</option><option value="DJI_SSEC">DJI/SSEC</option><option value="DJI_SSMI">DJI/SSMI</option><option value="DJI_S5E">DJI/S5E</option><option value="FCHI_FTSE">FCHI/FTSE</option><option value="FCHI_GDAXI">FCHI/GDAXI</option><option value="FCHI_HSI">FCHI/HSI</option><option value="FCHI_IBEX">FCHI/IBEX</option><option value="FCHI_IXIC">FCHI/IXIC</option><option value="FCHI_KS11">FCHI/KS11</option><option value="FCHI_KSE">FCHI/KSE</option><option value="FCHI_MXX">FCHI/MXX</option><option value="FCHI_N225">FCHI/N225</option><option value="FCHI_NSEI">FCHI/NSEI</option><option value="FCHI_RUT">FCHI/RUT</option><option value="FCHI_SPX">FCHI/SPX</option><option value="FCHI_SSEC">FCHI/SSEC</option><option value="FCHI_SSMI">FCHI/SSMI</option><option value="FCHI_S5E">FCHI/S5E</option><option value="FTSE_GDAXI">FTSE/GDAXI</option><option value="FTSE_HSI">FTSE/HSI</option><option value="FTSE_IBEX">FTSE/IBEX</option><option value="FTSE_IXIC">FTSE/IXIC</option><option value="FTSE_KS11">FTSE/KS11</option><option value="FTSE_KSE">FTSE/KSE</option><option value="FTSE_MXX">FTSE/MXX</option><option value="FTSE_N225">FTSE/N225</option><option value="FTSE_NSEI">FTSE/NSEI</option><option value="FTSE_RUT">FTSE/RUT</option><option value="FTSE_SPX">FTSE/SPX</option><option value="FTSE_SSEC">FTSE/SSEC</option><option value="FTSE_SSMI">FTSE/SSMI</option><option value="FTSE_S5E">FTSE/S5E</option><option value="GDAXI_HSI">GDAXI/HSI</option><option value="GDAXI_IBEX">GDAXI/IBEX</option><option value="GDAXI_IXIC">GDAXI/IXIC</option><option value="GDAXI_KS11">GDAXI/KS11</option><option value="GDAXI_KSE">GDAXI/KSE</option><option value="GDAXI_MXX">GDAXI/MXX</option><option value="GDAXI_N225">GDAXI/N225</option><option value="GDAXI_NSEI">GDAXI/NSEI</option><option value="GDAXI_RUT">GDAXI/RUT</option><option value="GDAXI_SPX">GDAXI/SPX</option><option value="GDAXI_SSEC">GDAXI/SSEC</option><option value="GDAXI_SSMI">GDAXI/SSMI</option><option value="GDAXI_S5E">GDAXI/S5E</option><option value="HSI_IBEX">HSI/IBEX</option><option value="HSI_IXIC">HSI/IXIC</option><option value="HSI_KS11">HSI/KS11</option><option value="HSI_KSE">HSI/KSE</option><option value="HSI_MXX">HSI/MXX</option><option value="HSI_N225">HSI/N225</option><option value="HSI_NSEI">HSI/NSEI</option><option value="HSI_RUT">HSI/RUT</option><option value="HSI_SPX">HSI/SPX</option><option value="HSI_SSEC">HSI/SSEC</option><option value="HSI_SSMI">HSI/SSMI</option><option value="HSI_S5E">HSI/S5E</option><option value="IBEX_IXIC">IBEX/IXIC</option><option value="IBEX_KS11">IBEX/KS11</option><option value="IBEX_KSE">IBEX/KSE</option><option value="IBEX_MXX">IBEX/MXX</option><option value="IBEX_N225">IBEX/N225</option><option value="IBEX_NSEI">IBEX/NSEI</option><option value="IBEX_RUT">IBEX/RUT</option><option value="IBEX_SPX">IBEX/SPX</option><option value="IBEX_SSEC">IBEX/SSEC</option><option value="IBEX_SSMI">IBEX/SSMI</option><option value="IBEX_S5E">IBEX/S5E</option><option value="IXIC_KS11">IXIC/KS11</option><option value="IXIC_KSE">IXIC/KSE</option><option value="IXIC_MXX">IXIC/MXX</option><option value="IXIC_N225">IXIC/N225</option><option value="IXIC_NSEI">IXIC/NSEI</option><option value="IXIC_RUT">IXIC/RUT</option><option value="IXIC_SPX">IXIC/SPX</option><option value="IXIC_SSEC">IXIC/SSEC</option><option value="IXIC_SSMI">IXIC/SSMI</option><option value="IXIC_S5E">IXIC/S5E</option><option value="KS11_KSE">KS11/KSE</option><option value="KS11_MXX">KS11/MXX</option><option value="KS11_N225">KS11/N225</option><option value="KS11_NSEI">KS11/NSEI</option><option value="KS11_RUT">KS11/RUT</option><option value="KS11_SPX">KS11/SPX</option><option value="KS11_SSEC">KS11/SSEC</option><option value="KS11_SSMI">KS11/SSMI</option><option value="KS11_S5E">KS11/S5E</option><option value="KSE_MXX">KSE/MXX</option><option value="KSE_N225">KSE/N225</option><option value="KSE_NSEI">KSE/NSEI</option><option value="KSE_RUT">KSE/RUT</option><option value="KSE_SPX">KSE/SPX</option><option value="KSE_SSEC">KSE/SSEC</option><option value="KSE_SSMI">KSE/SSMI</option><option value="KSE_S5E">KSE/S5E</option><option value="MXX_N225">MXX/N225</option><option value="MXX_NSEI">MXX/NSEI</option><option value="MXX_RUT">MXX/RUT</option><option value="MXX_SPX">MXX/SPX</option><option value="MXX_SSEC">MXX/SSEC</option><option value="MXX_SSMI">MXX/SSMI</option><option value="MXX_S5E">MXX/S5E</option><option value="N225_NSEI">N225/NSEI</option><option value="N225_RUT">N225/RUT</option><option value="N225_SPX">N225/SPX</option><option value="N225_SSEC">N225/SSEC</option><option value="N225_SSMI">N225/SSMI</option><option value="N225_S5E">N225/S5E</option><option value="NSEI_RUT">NSEI/RUT</option><option value="NSEI_SPX">NSEI/SPX</option><option value="NSEI_SSEC">NSEI/SSEC</option><option value="NSEI_SSMI">NSEI/SSMI</option><option value="NSEI_S5E">NSEI/S5E</option><option value="RUT_SPX">RUT/SPX</option><option value="RUT_SSEC">RUT/SSEC</option><option value="RUT_SSMI">RUT/SSMI</option><option value="RUT_S5E">RUT/S5E</option><option value="SPX_SSEC">SPX/SSEC</option><option value="SPX_SSMI">SPX/SSMI</option><option value="SPX_S5E">SPX/S5E</option><option value="SSEC_SSMI">SSEC/SSMI</option><option value="SSEC_S5E">SSEC/S5E</option><option value="SSMI_S5E">SSMI/S5E</option></select></div>
+    <div id="AEX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_AEX.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_AORD.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_BFX.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_BSESN.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_BVSP.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_DJI.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_FCHI.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_FTSE.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_GDAXI.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_HSI.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IBEX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_IBEX.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IXIC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_IXIC.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_KS11.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_KSE.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_MXX.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_N225.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_NSEI.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_RUT.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_SPX.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_SSEC.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_SSMI.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: 0; padding: 0;">
+        <figure class="left" style="margin-right: -3px;">
+            <img src="files_online_appendix/acfa_S5E.png" width="500" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_AORD" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_AORD.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_BFX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_BFX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_BSESN" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_BSESN.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_BVSP" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_BVSP.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_DJI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_DJI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_FCHI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_FCHI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_FTSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_FTSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_GDAXI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_GDAXI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_HSI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_HSI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_IBEX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_IBEX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_IXIC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_IXIC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_KS11.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AEX_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AEX_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_BFX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_BFX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_BSESN" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_BSESN.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_BVSP" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_BVSP.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_DJI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_DJI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_FCHI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_FCHI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_FTSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_FTSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_GDAXI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_GDAXI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_HSI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_HSI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_IBEX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_IBEX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_IXIC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_IXIC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_KS11.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="AORD_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_AORD_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_BSESN" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_BSESN.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_BVSP" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_BVSP.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_DJI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_DJI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_FCHI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_FCHI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_FTSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_FTSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_GDAXI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_GDAXI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_HSI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_HSI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_IBEX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_IBEX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_IXIC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_IXIC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_KS11.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BFX_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BFX_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_BVSP" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_BVSP.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_DJI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_DJI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_FCHI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_FCHI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_FTSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_FTSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_GDAXI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_GDAXI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_HSI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_HSI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_IBEX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_IBEX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_IXIC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_IXIC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_KS11.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BSESN_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BSESN_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_DJI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_DJI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_FCHI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_FCHI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_FTSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_FTSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_GDAXI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_GDAXI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_HSI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_HSI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_IBEX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_IBEX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_IXIC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_IXIC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_KS11.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="BVSP_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_BVSP_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_FCHI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_FCHI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_FTSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_FTSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_GDAXI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_GDAXI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_HSI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_HSI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_IBEX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_IBEX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_IXIC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_IXIC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_KS11.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="DJI_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_DJI_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_FTSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_FTSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_GDAXI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_GDAXI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_HSI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_HSI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_IBEX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_IBEX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_IXIC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_IXIC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_KS11.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FCHI_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FCHI_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_GDAXI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_GDAXI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_HSI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_HSI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_IBEX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_IBEX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_IXIC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_IXIC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_KS11.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="FTSE_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_FTSE_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_HSI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_HSI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_IBEX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_IBEX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_IXIC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_IXIC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_KS11.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="GDAXI_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_GDAXI_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI_IBEX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_HSI_IBEX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI_IXIC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_HSI_IXIC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI_KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_HSI_KS11.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_HSI_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_HSI_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_HSI_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_HSI_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_HSI_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_HSI_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_HSI_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_HSI_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="HSI_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_HSI_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IBEX_IXIC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IBEX_IXIC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IBEX_KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IBEX_KS11.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IBEX_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IBEX_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IBEX_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IBEX_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IBEX_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IBEX_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IBEX_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IBEX_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IBEX_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IBEX_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IBEX_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IBEX_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IBEX_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IBEX_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IBEX_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IBEX_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IBEX_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IBEX_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IXIC_KS11" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IXIC_KS11.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IXIC_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IXIC_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IXIC_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IXIC_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IXIC_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IXIC_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IXIC_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IXIC_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IXIC_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IXIC_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IXIC_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IXIC_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IXIC_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IXIC_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IXIC_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IXIC_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="IXIC_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_IXIC_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KS11_KSE" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KS11_KSE.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KS11_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KS11_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KS11_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KS11_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KS11_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KS11_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KS11_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KS11_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KS11_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KS11_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KS11_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KS11_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KS11_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KS11_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KS11_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KS11_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KSE_MXX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KSE_MXX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KSE_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KSE_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KSE_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KSE_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KSE_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KSE_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KSE_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KSE_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KSE_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KSE_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KSE_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KSE_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="KSE_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_KSE_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="MXX_N225" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_MXX_N225.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="MXX_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_MXX_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="MXX_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_MXX_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="MXX_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_MXX_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="MXX_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_MXX_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="MXX_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_MXX_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="MXX_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_MXX_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="N225_NSEI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_N225_NSEI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="N225_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_N225_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="N225_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_N225_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="N225_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_N225_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="N225_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_N225_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="N225_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_N225_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="NSEI_RUT" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_NSEI_RUT.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="NSEI_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_NSEI_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="NSEI_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_NSEI_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="NSEI_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_NSEI_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="NSEI_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_NSEI_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="RUT_SPX" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_RUT_SPX.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="RUT_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_RUT_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="RUT_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_RUT_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="RUT_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_RUT_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="SPX_SSEC" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_SPX_SSEC.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="SPX_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_SPX_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="SPX_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_SPX_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="SSEC_SSMI" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_SSEC_SSMI.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="SSEC_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_SSEC_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+    <div id="SSMI_S5E" style="width:1000px; display: flex; justify-content: space-between; gap: 0px; margin: -20px 0 0 0; padding: 0;">
+        <figure class="left" style="float:left">
+            <img src="files_online_appendix/ccfa_SSMI_S5E.png" width="1000" height="500"/>
+        </figure>
+    </div>
+    
+<script>
+    function scrollToPlot(type) {
+        let dropdown = document.getElementById(type === 'index' ? 'indexDropdown' : 'pairDropdown');
+        let value = dropdown.value;
+        if (value) {
+            let plot = document.getElementById(value);
+            plot.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+</script>
+
+</body>
+</html>
+
+        <!-- Navigation back to the index on Page 0 -->
+        <div>
+            <a href="page0_ind.html">Back to Index</a>
+        </div>
+    </body>
+    </html>
+    
