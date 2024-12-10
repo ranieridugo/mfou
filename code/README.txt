@@ -1,4 +1,4 @@
-f_ stands for (collection of) functions, p_ stand for program
+f_ stands for (collection of) functions
 
 f_covariance: covariance matrix of the mfBm and mfOU
 f_covariance_derivatives: analytical gradient of the cross-covariance function of the mfOU used in the MDE estimation
