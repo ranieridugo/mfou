@@ -238,4 +238,5 @@ for(i in 1 : ncol(mCombn)){
   mRho[iI, iJ] = vParamsCau[paste0("rho_", s1, "/", s2)]
 }
 mRho[lower.tri(mRho)] = t(mRho)[lower.tri(mRho)]
+diag(mRho) = 1; diag(mEta) = 0
 f_spillovers(vH[paste0("H_", vOrd)], mRho[vOrd, vOrd], plot = TRUE)
