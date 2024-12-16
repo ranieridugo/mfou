@@ -16,7 +16,7 @@ vOrd =
   stringr::str_replace("STOXX50E", "S5E")
 
 tTS =
-  read.csv("db_rv_230822.csv") |>
+  read.csv("db_rv_230822.csv") |> # Oxford-Man realized library 
   dplyr::rename(date = X, symbol = Symbol) |>
   dplyr::filter(rv5 != 0) |>
   dplyr::mutate(symbol = stringr::str_remove(symbol, "."),
