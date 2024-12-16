@@ -5,8 +5,8 @@ vSymbols =
     "HSI", "IBEX", "IXIC", "KS11", "KSE", "MXX", "N225", "NSEI", "RUT", "SPX",
     "SSEC", "SSMI", "S5E")
 vCountry = c("EU", "AS", "EU", "AS", "AM", "AM", "EU", "EU", "EU",
-            "AS", "EU", "AM", "AS", "AS", "AM", "AS", "AS", "AM",
-            "AM", "AS", "EU", "EU")
+             "AS", "EU", "AM", "AS", "AS", "AM", "AS", "AS", "AM",
+             "AM", "AS", "EU", "EU")
 vOrd = 
   data.frame(symb = vSymbols,
              country = vCountry) |>
@@ -20,8 +20,8 @@ tTS =
   dplyr::rename(date = X, symbol = Symbol) |>
   dplyr::filter(rv5 != 0) |>
   dplyr::mutate(symbol = stringr::str_remove(symbol, "."),
-         lrv5 = log(100 * sqrt(252 * rv5)),
-         date = as.Date(date)) |>
+                lrv5 = log(100 * sqrt(252 * rv5)),
+                date = as.Date(date)) |>
   dplyr::select(date, symbol, lrv5) |>
   tidyr::spread(symbol, -date) |>
   dplyr::rename(S5E = STOXX50E) |>
@@ -75,45 +75,45 @@ vS1 = c("FCHI", "KS11")
 vS2 = c("FTSE", "N225")
 vS = c("FCHI", "FTSE", "N225", "KS11")
 
-par(mfrow = c(2, 1), mar = c(2.7, 3, 0.5, 0), mgp = c(1.8, 0.8, 0))
+par(mfrow = c(2, 1), mar = c(2.7, 3.55, 0.5, 0), mgp = c(1.8, 0.8, 0), cex.lab = 1.2)
 for(i in 1 : 2){
   s1 = vS1[i]; s2 = vS2[i]
-    vTheo = f_ccf_theo(vParamsExa[paste0("a_", s1)], vParamsExa[paste0("a_", s2)],
+  vTheo = f_ccf_theo(vParamsExa[paste0("a_", s1)], vParamsExa[paste0("a_", s2)],
                      vParamsExa[paste0("nu_", s1)], vParamsExa[paste0("nu_", s2)],
                      vParamsExa[paste0("H_", s1)], vParamsExa[paste0("H_", s2)],
                      vParamsExa[paste0("rho_", s1, "/", s2)],  
                      vParamsExa[paste0("eta_", s1, "/", s2)], 
                      iLM)
-    mX = cbind(tTS[, s1], tTS[, s2])
-    cTitle = paste0(s1, "/", s2)
+  mX = cbind(tTS[, s1], tTS[, s2])
+  cTitle = paste0(s1, "/", s2)
   vEmp = sapply(X = - iLM : iLM, FUN = ccfl, x = mX[, 1], y = mX[, 2])
   plot(x = - iLM : iLM, y = vEmp, type = "h", 
        ylim = c(0, max(vEmp, vTheo)),
        ylab = latex2exp::TeX("$\\gamma_{i,j}(k)$"),
        xlab = "k")
   lines(x = - iLM : iLM, y = vTheo, col = "red")
-  mtext(cTitle, side = 3, line = - 1, adj = 0.01, cex = 0.92, font = 2)
+  mtext(cTitle, side = 3, line = - 1.2, adj = 0.01, cex = 1.2, font = 1)
 }
 par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1), mgp = c(3, 1, 0))
 
-par(mfrow = c(2, 2), mar = c(2.7, 3, 0.5, 0), mgp = c(1.8, 0.8, 0))
+par(mfrow = c(2, 2), mar = c(2.7, 3.55, 0.5, 0), mgp = c(1.8, 0.8, 0), cex.lab = 1.2)
 vS = c("FCHI", "FTSE", "N225", "KS11")
 for(i in 1 : 4){
   s1 = vS[i]
   vTheo = 
     f_acf_theo(vParamsExa[paste0("a_", s1)], vParamsExa[paste0("nu_", s1)],
-             vParamsExa[paste0("H_", s1)], lag.max = iLM)
+               vParamsExa[paste0("H_", s1)], lag.max = iLM)
   vEmp = sapply(X = 0 : iLM, FUN = ccfl, x = tTS[, s1], y = tTS[, s1])
   plot(x = 0 : iLM, y = vEmp, type = "h", 
        ylim = c(0, max(vEmp, vTheo)),
        ylab = latex2exp::TeX("$\\gamma_{i,i}(k)$"),
        xlab = "k")
   lines(x = 0 : iLM, y = vTheo, col = "red")
-  mtext(s1, side = 3, line = - 1, adj = 0.99, cex = 0.92, font = 2)
+  mtext(s1, side = 3, line = - 1.3, adj = 0.99, cex = 1.2, font = 1)
 }
 par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1), mgp = c(3, 1, 0))
 
-par(mfrow = c(2, 1), mar = c(2.7, 3, 0.5, 0), mgp = c(1.8, 0.8, 0))
+par(mfrow = c(2, 1), mar = c(2.7, 3.55, 0.5, 0), mgp = c(1.8, 0.8, 0), cex.lab = 1.2)
 for(i in 1 : 2){
   s1 = vS1[i]; s2 = vS2[i]
   vX = (0 : iLM) ^ (vParamsExa[paste0("H_", s1)] + vParamsExa[paste0("H_", s2)])
@@ -129,11 +129,11 @@ for(i in 1 : 2){
         y = c(rep(NA, iLM), oFitted1), col = "red")
   lines(x = c(- rev(vX), vX[- 1]),
         y = c(rev(oFitted2), rep(NA, iLM)), col = "red")
-  mtext(paste0(s1, "-", s2), side = 3, line = - 1, adj = 0.01, cex = 0.92, font = 2)
+  mtext(paste0(s1, "-", s2), side = 3, line = - 1.2, adj = 0.01, cex = 1.2, font = 1)
 }
 par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1), mgp = c(3, 1, 0))
 
-par(mfrow = c(2, 2), mar = c(2.7, 3, 0.5, 0), mgp = c(1.8, 0.8, 0))
+par(mfrow = c(2, 2), mar = c(2.7, 3.55, 0.5, 0), mgp = c(1.8, 0.8, 0), cex.lab = 1.2)
 for(i in 1 : 4){
   s1 = vS[i]
   vX = (0 : iLM) ^ (2 * vParamsExa[paste0("H_", s1)])
@@ -144,45 +144,45 @@ for(i in 1 : 4){
        ylab = latex2exp::TeX("$\\gamma_{i,i}(k)$"),
        xlab = latex2exp::TeX("$k^{(2H_i)}$"))
   lines(x = vX, y = oFitted, col = "red")
-  mtext(s1, side = 3, line = - 1, adj = 0.99, cex = 0.92, font = 2)
+  mtext(s1, side = 3, line = - 1.3, adj = 0.99, cex = 1.2, font = 1)
 }
 par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1), mgp = c(3, 1, 0))
 
-par(mfrow = c(2, 1), mar = c(2.7, 3, 0.5, 0), mgp = c(1.8, 0.8, 0))
+par(mfrow = c(2, 1), mar = c(2.7, 3.55, 0.5, 0), mgp = c(1.8, 0.8, 0), cex.lab = 1.2)
 for(i in 1 : 2){
   s1 = vS1[i]; s2 = vS2[i]
-    vTheo = 
-      f_ccf_asy_theo(vParamsAsy[paste0("nu_", s1)], vParamsAsy[paste0("nu_", s2)],
+  vTheo = 
+    f_ccf_asy_theo(vParamsAsy[paste0("nu_", s1)], vParamsAsy[paste0("nu_", s2)],
                    vParamsAsy[paste0("H_", s1)], vParamsAsy[paste0("H_", s2)],
                    vParamsAsy[paste0("rho_", s1, "/", s2)],  
                    vParamsAsy[paste0("eta_", s1, "/", s2)], 
                    vParamsAsy[paste0("cov_", s1, "/", s2)],
                    iLM)
-    mX = cbind(tTS[, s1], tTS[, s2])
-    cTitle = paste0(s1, "/", s2)
+  mX = cbind(tTS[, s1], tTS[, s2])
+  cTitle = paste0(s1, "/", s2)
   vEmp = sapply(X = - iLM : iLM, FUN = ccfl, x = mX[, 1], y = mX[, 2])
   plot(x = - iLM : iLM, y = vEmp, type = "h", 
        ylim = c(0, max(vEmp, vTheo)),
        ylab = latex2exp::TeX("$\\gamma_{i,j}^{a}(k)$"),
        xlab = "k")
   lines(x = - iLM : iLM, y = vTheo, col = "red")
-  mtext(cTitle, side = 3, line = - 1, adj = 0.01, cex = 0.92, font = 2)
+  mtext(cTitle, side = 3, line = - 1.2, adj = 0.01, cex = 1.2, font = 1)
 }
 par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1), mgp = c(3, 1, 0))
 
-par(mfrow = c(2, 2), mar = c(2.7, 3, 0.5, 0), mgp = c(1.8, 0.8, 0))
+par(mfrow = c(2, 2), mar = c(2.7, 3.55, 0.5, 0), mgp = c(1.8, 0.8, 0), cex.lab = 1.2)
 for(i in 1 : 4){
   s1 = vS[i]
   vTheo = 
     f_acf_asy_theo(vParamsAsy[paste0("nu_", s1)], vParamsAsy[paste0("H_", s1)],
-                 vParamsAsy[paste0("var_", s1)], lag.max = iLM)
+                   vParamsAsy[paste0("var_", s1)], lag.max = iLM)
   vEmp = sapply(X = 0 : iLM, FUN = ccfl, x = tTS[, s1], y = tTS[, s1])
   plot(x = 0 : iLM, y = vEmp, type = "h", 
        ylim = c(0, max(vEmp, vTheo)),
        ylab = latex2exp::TeX("$\\gamma^a_{i,i}(k)$"),
        xlab = "k")
   lines(x = 0 : iLM, y = vTheo, col = "red")
-  mtext(s1, side = 3, line = - 1, adj = 0.99, cex = 0.92, font = 2)
+  mtext(s1, side = 3, line = - 1.3, adj = 0.99, cex = 1.2, font = 1)
 }
 par(mfrow = c(1, 1), mar = c(5.1, 4.1, 4.1, 2.1), mgp = c(3, 1, 0))
 
@@ -210,6 +210,7 @@ vColor <- dplyr::case_when(
 V(g)$color = vColor
 V(g)$label.cex = 0.65
 set.seed(105) 
+par(mfrow = c(1, 1), mar = c(0, 0, 0, 0), mgp = c(1.8, 0.8, 0))
 plot(g, 
      layout = layout_with_fr(g), 
      edge.length = E(g)$weight,
