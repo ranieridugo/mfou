@@ -142,7 +142,7 @@ for(i in 1 : 4){
   plot(x = vX, y = vEmp, type = "h", 
        ylim = c(0, max(vEmp, vTheo)),
        ylab = latex2exp::TeX("$\\gamma_{i,i}(k)$"),
-       xlab = latex2exp::TeX("$\\sign{(k)}k^{(2H_i)}$"))
+       xlab = latex2exp::TeX("$k^{(2H_i)}$"))
   lines(x = vX, y = oFitted, col = "red")
   mtext(s1, side = 3, line = - 1, adj = 0.99, cex = 0.92, font = 2)
 }
