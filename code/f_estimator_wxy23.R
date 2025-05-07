@@ -5,8 +5,8 @@ f_est_H <-
     x = na.omit(y)
     x = x[is.finite(x)]
     n = length(x)
-    num = sum((x[5 : n] - 2 * head(x[3 : n], -2) + head(x, - 4)) ^ 2, na.rm = TRUE) 
-    den = sum((x[3 : n] - 2 * head(x[2 : n], -1) + head(x, - 2)) ^ 2, na.rm = TRUE)
+    num = sum((x[5 : n] - 2 * x[3 : (n - 2)] + x[1 : (n - 4)]) ^ 2, na.rm = TRUE) 
+    den = sum((x[3 : n] - 2 * x[2 : (n - 1)] + x[1 : (n - 2)]) ^ 2, na.rm = TRUE)
     H = 0.5 * log2(num/den)
     if(H > 0 & H < 1){
       return(H)
@@ -47,7 +47,7 @@ f_est_alpha <-
   x = na.omit(y)
   x = x[is.finite(x)]
   n = length(x)
-  num = (n * sum(x ^ 2) - sum(x) ^ 2) 
+  num = n * sum(x ^ 2) - sum(x) ^ 2 
   den = n ^ 2 * nu ^ 2 * H * gamma(2 * H)
   alpha = (num / den) ^ (- 1 / (2 * H))
   return(alpha)

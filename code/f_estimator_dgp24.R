@@ -1,30 +1,30 @@
-C12 <- 
+C12 <-
   function(ai, aj, Hi, Hj, delta) {
     H = Hi + Hj
     integrand1 = function(u){u^(H - 2) * exp(- aj * u)}
     integrand2 = function(u){u^(H - 2) * (exp(ai * u) - exp(- aj * u))}
     value = 1 / (ai + aj) * (
-      (exp((ai + aj) * delta) - 1) * 
+      (exp((ai + aj) * delta) - 1) *
         integrate(f = integrand1, lower = delta, upper = Inf)[1]$value +
         integrate(f = integrand2, lower = 0 , upper = delta)[1]$value
     )
     return(value)
   }
 
-C21 <- 
+C21 <-
   function (ai, aj, Hi, Hj, delta) {
     H = Hi + Hj
     integrand1 = function(u){u^(H - 2) * exp(- ai * u)}
     integrand2 = function(u){u^(H - 2) * (exp(aj * u) - exp(- ai * u))}
     value = 1/(ai + aj) * (
-      (exp((ai + aj) * delta) - 1) * 
+      (exp((ai + aj) * delta) - 1) *
         integrate(f = integrand1, lower = delta, upper = Inf)[1]$value +
         integrate(f = integrand2, lower = 0 , upper = delta)[1]$value
     )
     return(value)
   }
 
-f_coherence <- 
+f_coherence <-
   function(rhoij, etaij, Hi, Hj){
     H = Hi + Hj
     if(H != 1){
@@ -32,9 +32,9 @@ f_coherence <-
         gamma(H + 1)^2 /
         (gamma(2 * Hi + 1) * gamma(2 * Hj + 1) * sin(pi * Hi) * sin(pi * Hj)) *
         (rhoij ^ 2 * sin(0.5 * pi * H) ^ 2 + etaij ^ 2 * cos(0.5 * pi * H) ^ 2)
-    } 
+    }
     else if (H == 1) {
-      value = 
+      value =
         (gamma(2 * Hi + 1) * gamma(2 * Hj + 1) * sin(pi * Hi) * sin(pi * Hj)) ^ (- 1) *
         (rhoij ^ 2 + pi ^ 2 / 4 * etaij ^ 2)
     }
@@ -42,7 +42,7 @@ f_coherence <-
   }
 
 f_est_ij <-
-  function(xi, xj, ai, aj, nui, nuj, Hi, Hj, 
+  function(xi, xj, ai, aj, nui, nuj, Hi, Hj,
            s = 1, delta = 1/252, constraint.out = FALSE) {
     H = Hi + Hj
     mx = na.omit(cbind(xi, xj))
@@ -73,7 +73,7 @@ f_est_ij <-
   }
 
 f_est_ij_asy <-
-  function(xi, xj, nui, nuj, Hi, Hj, 
+  function(xi, xj, nui, nuj, Hi, Hj,
            s = 1, delta = 1/252, constraint.out = FALSE) {
   H = Hi + Hj
   mx = na.omit(cbind(xi, xj))
@@ -82,12 +82,12 @@ f_est_ij_asy <-
   n = nrow(mx)
   rho = (2 * cov(mx[, 1], mx[, 2]) -
            cov(mx[(1 + s) : n, 1], mx[1 : (n - s), 2]) -
-           cov(mx[(1 + s) : n, 2], mx[1 : (n - s), 1])) / 
-    (nui * nuj * (s * delta) ^ H) 
-  eta = (cov(mx[(1 + s) : n, 2], mx[1 : (n - s), 1]) -
-           cov(mx[(1 + s) : n, 1], mx[1 : (n - s), 2]) ) / 
+           cov(mx[(1 + s) : n, 2], mx[1 : (n - s), 1])) /
     (nui * nuj * (s * delta) ^ H)
-  
+  eta = (cov(mx[(1 + s) : n, 2], mx[1 : (n - s), 1]) -
+           cov(mx[(1 + s) : n, 1], mx[1 : (n - s), 2]) ) /
+    (nui * nuj * (s * delta) ^ H)
+
   constr = f_coherence(Hi, Hj, rho, eta)
   if(constraint.out == TRUE) {
     lOut = list(
@@ -100,16 +100,17 @@ f_est_ij_asy <-
   return(lOut)
   }
 
-f_est_rho_eta <- 
-  function(mX, vAlpha, vNu, vH,
+f_est_rho_eta <-
+  function(mX, vA, vNu, vH,
            s = 1, delta = 1/252, constraint.out = FALSE){
-    mRho <- mEta <- 
+    mRho <- mEta <-
       matrix(NA, nrow = ncol(mX), ncol = ncol(mX))
     colnames(mRho) <- colnames(mEta) <- colnames(mX)
     rownames(mRho) <- rownames(mEta) <- colnames(mX)
     for(i in 2 : ncol(mX)){
       for(j in 1 : (i - 1)){
-        tmp = f_est_ij(mX[, i], mX[, j], vA[i], vA[j], vNu[i], vNu[j], vH[i], vH[j])
+        tmp = f_est_ij(mX[, i], mX[, j], vA[i], vA[j], vNu[i], vNu[j], vH[i], vH[j],
+                       s = s, delta = delta, constraint.out = constraint.out)
         mRho[i, j] = tmp[1]
         mEta[i, j] = tmp[2]
         }
@@ -123,16 +124,17 @@ f_est_rho_eta <-
       "eta" = mEta))
   }
 
-f_est_rho_eta_asy <- 
+f_est_rho_eta_asy <-
   function(mX, vNu, vH,
            s = 1, delta = 1/252, constraint.out = FALSE){
-    mRho <- mEta <- 
+    mRho <- mEta <-
       matrix(NA, nrow = ncol(mX), ncol = ncol(mX))
     colnames(mRho) <- colnames(mEta) <- colnames(mX)
     rownames(mRho) <- rownames(mEta) <- colnames(mX)
     for(i in 2 : ncol(mX)){
       for(j in 1 : (i - 1)){
-        tmp = f_est_ij_asy(mX[, i], mX[, j], vNu[i], vNu[j], vH[i], vH[j])
+        tmp = f_est_ij_asy(mX[, i], mX[, j], vNu[i], vNu[j], vH[i], vH[j],
+                           s = s, delta = delta, constraint.out = constraint.out)
         mRho[i, j] = tmp[1]
         mEta[i, j] = tmp[2]
       }
