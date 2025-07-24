@@ -1,0 +1,26 @@
+Package: mfou
+Title: Simulation, Inference, Forecasting, and Spillover Analysis with the Multivariate Fractional Ornstein-Uhlenbeck Process and the Multivariate Fractional Brownian Motion
+Version: 0.0.0.9000
+Authors@R: 
+    person("Ranieri", "Dugo", , "dugoranieri@gmail.com", role = c("aut", "cre"))
+Description: Collection of functions that allow modeling multivariate time series data using the Multivariate Fractional Ornstein-Uhlenbeck process and the Multivariate Fractional Brownian Motion. These allow the simulation of the processes, the identification of its parameters from discrete observations (data), forecasting the process h-step ahead, and performing spillover analyses. Also, companion package to Dugo, Giorgio, Pigato (2024a, 2024b).
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Depends: 
+    R (>= 3.5)
+LazyData: true
+Imports: 
+    calculus,
+    dplyr,
+    ggplot2,
+    latex2exp,
+    pracma,
+    reshape2,
+    tidyr
+URL: https://github.com/ranieridugo/mfou
+BugReports: https://github.com/ranieridugo/mfou/issues
