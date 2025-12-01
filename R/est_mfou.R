@@ -393,17 +393,17 @@ est_gmm_mfou <- function(my,
                          verbose = TRUE) {
   d = ncol(my); dd = d * (d - 1) / 2
   if(type == "exa") {
-    vlb = c(rep(0.01, d), rep(0.01, d), rep(0.03, d), rep(- 0.999, dd), rep(- 2, dd))
-    vub = c(rep(3, d), rep(100, d), rep(0.95, d), rep(0.999, dd), rep(2, dd))
-    tet0 = est_mm_mfou(my, type = "exa")
+    vlb = c(rep(0.001, d), rep(0.01, d), rep(0.01, d), rep(- 0.999, dd), rep(- 2, dd))
+    vub = c(rep(5, d), rep(10, d), rep(0.95, d), rep(0.999, dd), rep(2, dd))
+    tet0 = est_mm_mfou(my, delta, type = "exa")
   } else if(type == "asy"){
-    vlb = c(rep(0.01, d), rep(0.01, d), rep(0.05, d), rep(- 3, dd), rep(- 0.99, dd), rep(- 2, dd))
-    vub = c(rep(3, d), rep(100, d), rep(0.95, d), rep(3, dd), rep(0.99, dd), rep(2, dd))
-    tet0 = est_mm_mfou(my, type = "asy")
+    vlb = c(rep(0.01, d), rep(0.01, d), rep(0.01, d), rep(- 3, dd), rep(- 0.99, dd), rep(- 2, dd))
+    vub = c(rep(3, d), rep(10, d), rep(0.95, d), rep(3, dd), rep(0.99, dd), rep(2, dd))
+    tet0 = est_mm_mfou(my, delta, type = "asy")
   } else if(type == "cau"){
-    vlb = c(rep(0.01, d), rep(0.01, d), rep(0.03, d), rep(- 0.999, dd))
-    vub = c(rep(3, d), rep(100, d), rep(0.95, d), rep(0.999, dd))
-    tet0 = est_mm_mfou(my, type = "exa")
+    vlb = c(rep(0.001, d), rep(0.01, d), rep(0.01, d), rep(- 0.999, dd))
+    vub = c(rep(5, d), rep(10, d), rep(0.95, d), rep(0.999, dd))
+    tet0 = est_mm_mfou(my, delta, type = "exa")
   }
   vtet0 = par_list2vec(tet0, d, type)
   itrace = ifelse(verbose == TRUE, 6, 0)
@@ -445,7 +445,8 @@ est_gmm_mfou <- function(my,
           return(loss %*% W %*% loss)
         }),
         gr = (function(par){
-          loss = errors_gmm(par, my, type, ts = FALSE)
+          loss = errors_gmm(par, my, type, ts = FALSE,
+                            lag_max, lag_add, delta)
           jac = jacobian_gmm(par, my, type,
                              lag_max, lag_add, delta)
           return(2 * t(jac) %*% W %*% loss)
