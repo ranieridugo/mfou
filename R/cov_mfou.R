@@ -33,19 +33,18 @@ cov_iik <- function(yi, k, mui = NULL) {
 #' @rdname ccf_sample
 cov_ijk <- function(yi, yj, k, mui = NULL, muj = NULL) {
   if (length(yi) != length(yj)) stop("yi and yj must have same length.")
-  y = cbind(yi, yj)
-  n = nrow(y)
+  n = length(yi)
   if (is.null(mui) | is.null(muj)) {
     mui = mean(yi, na.rm = TRUE)
     muj = mean(yj, na.rm = TRUE)
   }
   if (k > 0) {
-    mean(y[(1 + k) : n, 1] * y[1 : (n - k), 2] - mui * muj, na.rm = TRUE)
+    mean(yi[(1 + k) : n] * yj[1 : (n - k)] - mui * muj, na.rm = TRUE)
   } else if (k < 0) {
     k = - k
-    mean(y[(1 + k) : n, 2] * y[1 : (n - k), 1] - mui * muj, na.rm = TRUE)
+    mean(yj[(1 + k) : n] * yi[1 : (n - k)] - mui * muj, na.rm = TRUE)
   } else if (k == 0) {
-    mean(y[, 1] * y[, 2] - mui * muj, na.rm = TRUE)
+    mean(yi[, 1] * yj[, 2] - mui * muj, na.rm = TRUE)
   }
 }
 
