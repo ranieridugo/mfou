@@ -44,7 +44,7 @@ cov_ijk <- function(yi, yj, k, mui = NULL, muj = NULL) {
     k = - k
     mean(yj[(1 + k) : n] * yi[1 : (n - k)] - mui * muj, na.rm = TRUE)
   } else if (k == 0) {
-    mean(yi[, 1] * yj[, 2] - mui * muj, na.rm = TRUE)
+    mean(yi * yj - mui * muj, na.rm = TRUE)
   }
 }
 
