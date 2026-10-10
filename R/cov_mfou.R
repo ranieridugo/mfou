@@ -149,7 +149,7 @@ cov_ijk_mfou <- function(ai, aj, nui, nuj, Hi, Hj, rhoij, etaij, k) {
 #' @rdname cov_mfou
 cov_jik_mfou <- function(ai, aj, nui, nuj, Hi, Hj, rhoij, etaij, k) {
     if (k < 0) stop("'k' must be equal or greater than zero")
-    # return(cov_ijk_mfou(aj, ai, nuj, nui, Hj, Hi, rhoij, - etaij, k))
+    return(cov_ijk_mfou(aj, ai, nuj, nui, Hj, Hi, rhoij, - etaij, k))
 }
 
 #' Autocovariance function of the fOU
