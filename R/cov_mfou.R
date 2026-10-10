@@ -73,9 +73,9 @@ var_fou <- function(a, nu, H) {
 #' - `cov_ij0_mfou` calculates the covariance between component i and j,
 #' \deqn{\text{Cov}\left(Y_t^i,Y_t^j\right);}
 #' - `cov_ijk_mfou` calculates the covariance between component i at time \eqn{t+k} and
-#'  component j at time \eqn{t}, \deqn{\text{Cov}\left(Y_t^i,Y_t^j\right);}
+#'  component j at time \eqn{t}, \deqn{\text{Cov}\left(Y_{t+k}^i,Y_t^j\right);}
 #' - `cov_jik_mfou` calculates the covariance between component i at time \eqn{t} and
-#'  component j at time \eqn{t+k}, \deqn{\text{Cov}\left(Y_t^i,Y_t^j\right);}
+#'  component j at time \eqn{t+k}, \deqn{\text{Cov}\left(Y_t^i,Y_{t+k}^j\right);}
 #'  \eqn{k\in\mathbb{R}}.
 #'
 #' @param ai Speed of mean reversion of component i.
@@ -129,7 +129,7 @@ cov_ij0_mfou <- function(ai, aj, nui, nuj, Hi, Hj, rhoij, etaij) {
 #' @export
 #' @rdname cov_mfou
 cov_ijk_mfou <- function(ai, aj, nui, nuj, Hi, Hj, rhoij, etaij, k) {
-  if (k < 0) stop("'k' must be eqnual or greater than zero")
+  if (k < 0) stop("'k' must be equal or greater than zero")
   H = Hi + Hj
   cov = cov_ij0_mfou(ai, aj, nui, nuj, Hi, Hj, rhoij, etaij)
   if(k == 0) {
@@ -150,29 +150,14 @@ cov_ijk_mfou <- function(ai, aj, nui, nuj, Hi, Hj, rhoij, etaij, k) {
 #' @rdname cov_mfou
 cov_jik_mfou <- function(ai, aj, nui, nuj, Hi, Hj, rhoij, etaij, k) {
     if (k < 0) stop("'k' must be equal or greater than zero")
-    H = Hi + Hj
-    cov = cov_ij0_mfou(ai, aj, nui, nuj, Hi, Hj, rhoij, etaij)
-    if(k == 0) {
-      value = cov
-    } else if (k > 0) {
-      if(H != 1) {
-        value =
-          exp(- aj * k) * cov + nui * nuj * exp(- aj * k) *
-          H * (H - 1) * (rhoij - etaij) * 0.5 * I_ji(ai, aj, Hi, Hj, k)
-      } else if (H == 1){
-        value =
-          exp(- aj * k) * cov + nui * nuj * exp(- aj * k) *
-          etaij * 0.5 * I_ji(ai, aj, Hi, Hj, k)
-      }
-    }
-    return(unname(value))
+    # return(cov_ijk_mfou(aj, ai, nuj, nui, Hj, Hi, rhoij, - etaij, k))
 }
 
 #' Autocovariance function of the fOU
 #'
 #' @description
 #' These functions calculate the autocovariance function of the fractional
-#' Ornstein-Uhlenbeck process for a number of lags, based on on model parameters.
+#' Ornstein-Uhlenbeck process for a number of lags, based on model parameters.
 #' - `acf_fou` calculates the exact autocovariances;
 #' - `acf_asy_fou`calculates the asymptotic autocovariances arising in the regime of
 #' small speed of mean reversion.

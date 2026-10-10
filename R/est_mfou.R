@@ -97,7 +97,7 @@ est_a_fou <- function(y, H, nu){
   num = n * sum(x ^ 2) - sum(x) ^ 2
   den = n ^ 2 * nu ^ 2 * H * gamma(2 * H)
   alpha = (num / den) ^ (- 1 / (2 * H))
-  return(alpha)
+  return(max(alpha, 1e-10))
 }
 
 #' Two-step estimator of fOU
@@ -393,38 +393,38 @@ est_gmm_mfou <- function(my,
                          verbose = TRUE) {
   d = ncol(my); dd = d * (d - 1) / 2
   if(type == "exa") {
-    vlb = c(rep(0.01, d), rep(0.01, d), rep(0.03, d), rep(- 0.999, dd), rep(- 2, dd))
-    vub = c(rep(3, d), rep(100, d), rep(0.95, d), rep(0.999, dd), rep(2, dd))
-    tet0 = est_mm_mfou(my, type = "exa")
+    vlb = c(rep(0.00001, d), rep(0.01, d), rep(0.01, d), rep(- 0.999, dd), rep(- 1, dd))
+    vub = c(rep(5, d), rep(5, d), rep(0.45, d), rep(0.999, dd), rep(1, dd))
+    tet0 = est_mm_mfou(my, type = "exa", delta = delta)
   } else if(type == "asy"){
-    vlb = c(rep(0.01, d), rep(0.01, d), rep(0.05, d), rep(- 3, dd), rep(- 0.99, dd), rep(- 2, dd))
-    vub = c(rep(3, d), rep(100, d), rep(0.95, d), rep(3, dd), rep(0.99, dd), rep(2, dd))
-    tet0 = est_mm_mfou(my, type = "asy")
+    vlb = c(rep(0.01, d), rep(0.01, d), rep(0.03, d), rep(- 3, dd), rep(- 0.99, dd), rep(- 2, dd))
+    vub = c(rep(3, d), rep(5, d), rep(0.95, d), rep(3, dd), rep(0.99, dd), rep(2, dd))
+    tet0 = est_mm_mfou(my, type = "asy", delta = delta)
   } else if(type == "cau"){
     vlb = c(rep(0.01, d), rep(0.01, d), rep(0.03, d), rep(- 0.999, dd))
-    vub = c(rep(3, d), rep(100, d), rep(0.95, d), rep(0.999, dd))
-    tet0 = est_mm_mfou(my, type = "exa")
+    vub = c(rep(5, d), rep(5, d), rep(0.95, d), rep(0.999, dd))
+    tet0 = est_mm_mfou(my, type = "exa", delta = delta)
   }
   vtet0 = par_list2vec(tet0, d, type)
   itrace = ifelse(verbose == TRUE, 6, 0)
   # step 1
-  nl = length(c(0 : 5, c(20, 50)))
+  nl = length(c(0 : lag_max, lag_add))
   nw = nl * d + nl * dd + (nl - 1) * dd
   res1 =
     optim(
       par = vtet0,
       fn = (function(par){
-        loss = errors_gmm(par, my, type, ts = FALSE,
-                          lag_max, lag_add, delta)
+        loss = errors_gmm(theta = par, my = my, type = type, ts = FALSE,
+                          lag_max = lag_max, lag_add = lag_add, delta = delta)
         W = diag(nw)
         return(loss %*% W %*% loss)
       }),
       gr = (function(par){
-        loss = errors_gmm(par, my, type, ts = FALSE,
-                          lag_max, lag_add, delta)
+        loss = errors_gmm(theta = par, my = my, type = type, ts = FALSE,
+                          lag_max = lag_max, lag_add = lag_add, delta = delta)
         W = diag(nw)
-        jac = jacobian_gmm(par, my, type,
-                           lag_max, lag_add, delta)
+        jac = jacobian_gmm(theta = par, my = my, type = type,
+                           lag_max = lag_max, lag_add = lag_add, delta = delta)
         return(2 * t(jac) %*% W %*% loss)
       }),
       method = "L-BFGS-B",
@@ -440,14 +440,15 @@ est_gmm_mfou <- function(my,
       optim(
         par = vtet0,
         fn = (function(par){
-          loss = errors_gmm(par, my, type, ts = FALSE,
-                            lag_max, lag_add, delta)
+          loss = errors_gmm(theta = par, my = my, type = type, ts = FALSE,
+                            lag_max = lag_max, lag_add = lag_add, delta = delta)
           return(loss %*% W %*% loss)
         }),
         gr = (function(par){
-          loss = errors_gmm(par, my, type, ts = FALSE)
-          jac = jacobian_gmm(par, my, type,
-                             lag_max, lag_add, delta)
+          loss = errors_gmm(theta = par, my = my, type = type, ts = FALSE,
+                            lag_max = lag_max, lag_add = lag_add, delta = delta)
+          jac = jacobian_gmm(theta = par, my = my, type = type,
+                             lag_max = lag_max, lag_add = lag_add, delta = delta)
           return(2 * t(jac) %*% W %*% loss)
         }),
         method = "L-BFGS-B",
