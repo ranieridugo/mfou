@@ -58,7 +58,7 @@ gof_fou <- function(y, est, lag_max = 50, delta = 1/252){
 #' of small speed of mean reversion.
 #'
 #' @param my Numeric matrix containing the time series of the multivariate system as columns.
-#' @param est List of estimated parameters, possibly from `est_gmm_mfou` called on `my.
+#' @param est List of estimated parameters, possibly from `est_gmm_mfou` called on my.
 #' @param si Index identifying the component i of the system (or its column name in my)
 #' @param sj Index identifying the component j of the system (or its column name in my)
 #' @param lag_max Positive integer. All the lags between 0 (included) and `lag_max` are considered.
@@ -115,7 +115,7 @@ gof_mfou <- function(my, est, si = 1, sj = 2, lag_max = 50, delta = 1/252){
 #' cross-covariances when considered against a suitable power of the lags,
 #' determined by the Hurst coefficients.
 #' - `lin_acf_fou` evaluates the condition on the autocovariance of a univariate component;
-#' - `lin_ccf_mfou` evaluates the condition on the cross-covariances between two components;
+#' - `lin_ccf_mfou` evaluates the condition on the cross-covariances between two components.
 #'
 #' The conditions should be considered for all components and pairs of components
 #' before modeling the entire system in the asymptotic regime.
@@ -123,7 +123,7 @@ gof_mfou <- function(my, est, si = 1, sj = 2, lag_max = 50, delta = 1/252){
 #' @param y Numeric vector representing a time series.
 #' @param H Hurst coefficient. Default is NULL, in which case H is obtained with the COF estimator.
 #' @param yi Numeric vector representing a time series.
-#' @param yj Numeric vector of the same length of yi representing a time series.
+#' @param yj Numeric vector of the same length as yi representing a time series.
 #' @param Hi Hurst coefficient of component i. Default is NULL, in which case Hi is obtained with the COF estimator.
 #' @param Hj Hurst coefficient of component j. Default is NULL, in which case Hj is obtained with the COF estimator.
 #' @param lag_max Positive integer. All the lags between 0 (included) and `lag_max` are considered.

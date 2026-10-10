@@ -1,7 +1,7 @@
 #' Log-realized volatility
 #'
 #' A dataset containing the logarithm of a number of realized volatilities
-#' (annualized and tranformed to percentages). This dataset is used in Bibinger,
+#' (annualized and transformed to percentages). This dataset is used in Bibinger,
 #' Yu, and Zhang (2025). It is not the same as in the paper Dugo, Giorgio, and
 #' Pigato (2025) because of not having permission to disseminate it.
 #'
@@ -28,7 +28,7 @@
 #' \describe{
 #'   \item{HIP}{Hippocampus.}
 #'   \item{AMY}{Amygdala.}
-#'   \item{pTHA}{Posterio Thalamus.}
+#'   \item{pTHA}{Posterior Thalamus.}
 #'   \item{aTHA}{Anterior Thalamus.}
 #'   \item{NAc}{Nucleus Accumbens.}
 #'   \item{GP}{Globus Pallidus.}

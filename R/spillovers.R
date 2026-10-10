@@ -132,7 +132,7 @@ spillovers <- function(H, rho, plot = FALSE){
     # Plot pairwise
     plot_pair <-
       mpair |>
-      reshape2::melt() |>
+      # reshape2::melt() |>
       ggplot2::ggplot(ggplot2::aes(Var2, Var1, fill = value)) +
       ggplot2::geom_tile() +
       ggplot2::scale_fill_gradient2(low = "blue4", mid = "white", high = "red4",

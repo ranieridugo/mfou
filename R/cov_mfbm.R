@@ -20,7 +20,7 @@
 #'
 #' @returns
 #' Both functions print a message regarding the admissibility of the parameters.
-#' `cov_existence_2fbm` returns the value of the constrains, whereas `cov_existence_mfbm` returns the
+#' `cov_existence_2fbm` returns the value of the constrain, whereas `cov_existence_mfbm` returns the
 #' eigenvalues of the auxiliary matrix.
 #' @export
 #' @rdname cov_existence
@@ -105,7 +105,7 @@ cov_existence_2fbm <- function(rhoij, etaij, Hi, Hj, out = FALSE) {
 #'
 #' @description
 #' Formulas for the computation of the asymmetry matrix \eqn{\eta},
-#' respectively  coefficient \eqn{\eta_{i,j}},
+#' respectively coefficient \eqn{\eta_{i,j}},
 #' as a function of the other parameters, \eqn{\rho} and \eqn{H}, respectively
 #'  \eqn{\rho_{i,j},\ H_i, \text{and}\ H_j}, in the casusal multivariate fractional
 #' Brownian motion. The causal case corresponds to the process depending only on

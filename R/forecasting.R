@@ -369,7 +369,7 @@ fcast_se_mfou <- function(n, h, a, nu, H, rho, eta, delta) {
 #' us to compute point forecasts and associated standard errors in the framework
 #' of the slow multivariate fractional Ornstein-Uhlenbeck process of dimension \eqn{d}.
 #' This process is constructed by leveraging the small mean reversion coefficient
-#' asymptotic result of the cross-covariance function .
+#' asymptotic result of the cross-covariance function.
 #'
 #' Given that the vector that we want to predict, \eqn{X:=Y_{(n+h)\Delta}\in\mathbb{R}^d}, and the
 #' history of information, \eqn{Y:=\left(Y_{n\Delta},\dots, Y_{\Delta}\right)\in\mathbb{R}^{d\times n}},

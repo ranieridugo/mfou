@@ -520,7 +520,7 @@ jacobian_gmm <- function(theta, my, type = "exa",
 #'
 #' @description
 #' Functions that convert the way in which parameters are stored, from vector to list
-#' or vice-verse.
+#' or vice versa.
 #'
 #' @param lpar List of parameters.
 #' @param vpar Vector of parameters.
