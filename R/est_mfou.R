@@ -393,16 +393,16 @@ est_gmm_mfou <- function(my,
                          verbose = TRUE) {
   d = ncol(my); dd = d * (d - 1) / 2
   if(type == "exa") {
-    vlb = c(rep(0.00001, d), rep(0.01, d), rep(0.01, d), rep(- 0.999, dd), rep(- 1, dd))
-    vub = c(rep(5, d), rep(5, d), rep(0.45, d), rep(0.999, dd), rep(1, dd))
+    vlb = c(rep(0.001, d), rep(0.01, d), rep(0.01, d), rep(- 0.999, dd), rep(- 2, dd))
+    vub = c(rep(5, d), rep(10, d), rep(0.95, d), rep(0.999, dd), rep(2, dd))
     tet0 = est_mm_mfou(my, type = "exa", delta = delta)
   } else if(type == "asy"){
-    vlb = c(rep(0.01, d), rep(0.01, d), rep(0.03, d), rep(- 3, dd), rep(- 0.99, dd), rep(- 2, dd))
-    vub = c(rep(3, d), rep(5, d), rep(0.95, d), rep(3, dd), rep(0.99, dd), rep(2, dd))
+    vlb = c(rep(0.01, d), rep(0.01, d), rep(0.01, d), rep(- 3, dd), rep(- 0.99, dd), rep(- 2, dd))
+    vub = c(rep(3, d), rep(10, d), rep(0.95, d), rep(3, dd), rep(0.99, dd), rep(2, dd))
     tet0 = est_mm_mfou(my, type = "asy", delta = delta)
   } else if(type == "cau"){
-    vlb = c(rep(0.01, d), rep(0.01, d), rep(0.03, d), rep(- 0.999, dd))
-    vub = c(rep(5, d), rep(5, d), rep(0.95, d), rep(0.999, dd))
+    vlb = c(rep(0.001, d), rep(0.01, d), rep(0.01, d), rep(- 0.999, dd))
+    vub = c(rep(5, d), rep(10, d), rep(0.95, d), rep(0.999, dd))
     tet0 = est_mm_mfou(my, type = "exa", delta = delta)
   }
   vtet0 = par_list2vec(tet0, d, type)
@@ -445,10 +445,17 @@ est_gmm_mfou <- function(my,
           return(loss %*% W %*% loss)
         }),
         gr = (function(par){
+<<<<<<< HEAD
           loss = errors_gmm(theta = par, my = my, type = type, ts = FALSE,
                             lag_max = lag_max, lag_add = lag_add, delta = delta)
           jac = jacobian_gmm(theta = par, my = my, type = type,
                              lag_max = lag_max, lag_add = lag_add, delta = delta)
+=======
+          loss = errors_gmm(par, my, type, ts = FALSE,
+                            lag_max, lag_add, delta)
+          jac = jacobian_gmm(par, my, type,
+                             lag_max, lag_add, delta)
+>>>>>>> 1ea7ff065745e62bf66ecedc6846fa8c9c57d0f5
           return(2 * t(jac) %*% W %*% loss)
         }),
         method = "L-BFGS-B",
